@@ -71,4 +71,11 @@ public class Patient {
         }
         this.phoneNumber = newPhoneNumber;
     }
+
+    public void changeBirthday(LocalDate newBirthday) {
+        if (newBirthday.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Birthday should not be after now: " + newBirthday);
+        }
+        this.birthday = newBirthday;
+    }
 }

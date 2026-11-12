@@ -1,0 +1,26 @@
+info:
+  name: Delete patient by email
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/patients/anna.nowak@example.com"
+  params:
+    - name: ""
+      value: anna.nowak@example.com
+      type: query
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "204"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
