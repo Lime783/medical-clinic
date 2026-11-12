@@ -1,0 +1,35 @@
+info:
+  name: Change patient info
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/patients/anna.nowak@example.com"
+  body:
+    type: json
+    data: |
+      {
+        "id": null,
+        "email": "anna.nowak@example.com",
+        "password": "Tajne#2026",
+        "idCardNo": "ABC123456",
+        "firstName": "Anna",
+        "lastName": "Nowak",
+        "phoneNumber": "600100200",
+        "birthday": "1990-05-12"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
