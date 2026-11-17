@@ -10,7 +10,7 @@ http:
     type: json
     data: |
       {
-        "id": null,
+        "id": "34e272b9-c801-401d-926b-67bc013ce681",
         "email": "anna.nowak@example.com",
         "password": "Tajne#2026",
         "idCardNo": "ABC123456",

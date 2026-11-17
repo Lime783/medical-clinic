@@ -1,13 +1,13 @@
 info:
-  name: Delete patient by email
+  name: Get patient by email
   type: http
-  seq: 6
+  seq: 3
 
 http:
-  method: DELETE
-  url: "{{baseUrl}}/patients/anna.nowak@example.com"
+  method: GET
+  url: "{{baseUrl}}/patients?email=anna.nowak@example.com"
   params:
-    - name: ""
+    - name: email
       value: anna.nowak@example.com
       type: query
   auth: inherit
@@ -16,7 +16,7 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "204"
+      value: "200"
 
 settings:
   encodeUrl: true
