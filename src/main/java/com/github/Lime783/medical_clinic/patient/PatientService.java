@@ -1,6 +1,7 @@
 package com.github.Lime783.medical_clinic.patient;
 
 import com.github.Lime783.medical_clinic.exceptions.DuplicateException;
+import com.github.Lime783.medical_clinic.mapper.PatientMapper;
 import com.github.Lime783.medical_clinic.patient.command.CommandAddPatient;
 import com.github.Lime783.medical_clinic.patient.command.CommandChangePassword;
 import com.github.Lime783.medical_clinic.patient.command.CommandUpdatePatient;
@@ -17,13 +18,14 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final PatientMapper patientMapper;
 
     public PatientDto addPatientToDatabase(CommandAddPatient command) {
-        Patient patientToAdd = new Patient(UUID.randomUUID(), command.email(), command.password(), command.idCardNo(), command.firstName(), command.lastName(), command.phoneNumber(), command.birthday());
+        Patient patientToAdd = patientMapper.toEntity(command);
         if (patientRepository.findPatientByEmail(command.email()).isPresent()) {
             throw new DuplicateException("Patient with an email " + command.email() + "already exists: " + patientRepository.getPatientByEmail(command.email()).getId());
         }
-        return toDto(patientRepository.add(patientToAdd));
+        return patientMapper.toDto(patientRepository.add(patientToAdd));
     }
 
     public void deletePatientFromDatabase(PatientDto patient) {
@@ -35,24 +37,24 @@ public class PatientService {
     }
 
     public Optional<PatientDto> findPatientByEmail(String email) {
-        return patientRepository.findPatientByEmail(email).map(this::toDto);
+        return patientRepository.findPatientByEmail(email).map(patientMapper::toDto);
     }
 
     public PatientDto getPatientByEmail(String email) {
-        return toDto(patientRepository.getPatientByEmail(email));
+        return patientMapper.toDto(patientRepository.getPatientByEmail(email));
     }
 
     public Optional<PatientDto> findPatientById(UUID id) {
-        return patientRepository.findPatientById(id).map(this::toDto);
+        return patientRepository.findPatientById(id).map(patientMapper::toDto);
     }
 
     public PatientDto getPatientById(UUID id) {
-        return toDto(patientRepository.getPatientById(id));
+        return patientMapper.toDto(patientRepository.getPatientById(id));
     }
 
     public List<PatientDto> getAllPatients() {
         return patientRepository.getAllPatients().stream()
-                .map(this::toDto)
+                .map(patientMapper::toDto)
                 .toList();
     }
 
@@ -63,18 +65,14 @@ public class PatientService {
             existing.changePassword(command.password());
             existing.changePhoneNumber(command.phoneNumber());
             existing.changeBirthday(command.birthday());
-            return toDto(existing);
+            return patientMapper.toDto(existing);
         });
     }
 
     public Optional<PatientDto> changePassword(String email, CommandChangePassword command) {
         return patientRepository.findPatientByEmail(email).map(existing -> {
             existing.changePassword(command.newPassword());
-            return toDto(existing);
+            return patientMapper.toDto(existing);
         });
-    }
-
-    private PatientDto toDto(Patient patient) {
-        return new PatientDto(patient.getId(), patient.getEmail(), patient.getFirstName(), patient.getLastName(), patient.getPhoneNumber(), patient.getBirthday());
     }
 }
