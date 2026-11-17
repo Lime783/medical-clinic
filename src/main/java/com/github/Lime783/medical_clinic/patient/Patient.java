@@ -1,5 +1,6 @@
 package com.github.Lime783.medical_clinic.patient;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -9,27 +10,36 @@ import java.util.UUID;
 @ToString(exclude = {"password", "idCardNo"})
 @EqualsAndHashCode(of = {"idCardNo", "firstName", "lastName"})
 public class Patient {
+    @NotNull
     private final UUID id;
+
+    @NotBlank(message = "email cannot be blank or null")
+    @Email(message = "email must resemble an actual email")
     private String email;
 
-    @NonNull
+    @NotBlank(message = "Password cannot be blank or null")
+    @Size(min = 3, message = "Password must contain at least 3 characters")
     private String password;
 
-    private String idCardNo;
+    @NotBlank(message = "ID card number cannot be blank or null")
+    @Pattern(regexp = "\\d{9}", message = "ID card number must contain 9 digits")
+    private final String idCardNo;
 
-    @NonNull
+    @NotBlank(message = "First name cannot be blank or null")
     private String firstName;
 
-    @NonNull
+    @NotBlank(message = "Last name cannot be blank or null")
     private String lastName;
 
+    @NotBlank(message = "Phone number cannot be blank or null")
     private String phoneNumber;
 
-    @NonNull
+    @NotNull
+    @PastOrPresent(message = "Birthday cannot be in the future")
     private LocalDate birthday;
 
     @Builder
-    public Patient(String email, @NonNull String password, String idCardNo, @NonNull String firstName, @NonNull String lastName, String phoneNumber, @NonNull LocalDate birthday) {
+    public Patient(String email, String password, String idCardNo, String firstName, String lastName, String phoneNumber, LocalDate birthday) {
         validateData(email, password, idCardNo, firstName, lastName, phoneNumber, birthday);
         this.id = UUID.randomUUID();
         this.email = email;
@@ -41,7 +51,7 @@ public class Patient {
         this.birthday = birthday;
     }
 
-    private void validateData(String email, @NonNull String password, String idCardNo, @NonNull String firstName, @NonNull String lastName, String phoneNumber, @NonNull LocalDate birthday) {
+    private void validateData(String email, String password, String idCardNo, String firstName, String lastName, String phoneNumber, LocalDate birthday) {
         validateEmail(email);
         validatePassword(password);
         validateIdCardNo(idCardNo);
@@ -101,11 +111,6 @@ public class Patient {
     public void changePassword(String newPassword) {
         validatePassword(newPassword);
         this.password = newPassword;
-    }
-
-    public void changeIdCardNo(String newIdCardNo) {
-        validateIdCardNo(newIdCardNo);
-        this.idCardNo = newIdCardNo;
     }
 
     public void changeFirstName(String newFirstName) {

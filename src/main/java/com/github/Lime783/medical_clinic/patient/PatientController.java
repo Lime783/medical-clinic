@@ -4,6 +4,7 @@ import com.github.Lime783.medical_clinic.patient.command.CommandAddPatient;
 import com.github.Lime783.medical_clinic.patient.command.CommandChangePassword;
 import com.github.Lime783.medical_clinic.patient.command.CommandUpdatePatient;
 import com.github.Lime783.medical_clinic.patient.dto.PatientDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<PatientDto> addPatient(@RequestBody CommandAddPatient command) {
+    public ResponseEntity<PatientDto> addPatient(@Valid @RequestBody CommandAddPatient command) {
         PatientDto saved = patientService.addPatientToDatabase(command);
         return ResponseEntity.created(URI.create("/patients/" + saved.id())).body(saved);
     }
@@ -43,7 +44,8 @@ public class PatientController {
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<PatientDto> update(@PathVariable String email, @RequestBody CommandUpdatePatient command) {
+    public ResponseEntity<PatientDto> update(@PathVariable String email,
+                                             @Valid @RequestBody CommandUpdatePatient command) {
         return patientService.update(email, command)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -51,7 +53,7 @@ public class PatientController {
 
     @PatchMapping("/{email}/new-password")
     public ResponseEntity<PatientDto> changePassword(@PathVariable String email,
-                                                     @RequestBody CommandChangePassword command) {
+                                                     @Valid @RequestBody CommandChangePassword command) {
         return patientService.changePassword(email, command)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
