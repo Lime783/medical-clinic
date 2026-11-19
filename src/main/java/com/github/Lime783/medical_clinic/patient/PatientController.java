@@ -25,10 +25,8 @@ public class PatientController {
     }
 
     @GetMapping(params = "email")
-    public ResponseEntity<PatientDto> findPatientByEmail(@RequestParam String email) {
-        return patientService.findPatientByEmail(email)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public PatientDto findPatientByEmail(@RequestParam String email) {
+        return patientService.getPatientByEmail(email);
     }
 
     @PostMapping
@@ -44,18 +42,14 @@ public class PatientController {
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<PatientDto> update(@PathVariable String email,
-                                             @Valid @RequestBody CommandUpdatePatient command) {
-        return patientService.update(email, command)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public PatientDto update(@PathVariable String email,
+                             @Valid @RequestBody CommandUpdatePatient command) {
+        return patientService.update(email, command);
     }
 
     @PatchMapping("/{email}/new-password")
-    public ResponseEntity<PatientDto> changePassword(@PathVariable String email,
-                                                     @Valid @RequestBody CommandChangePassword command) {
-        return patientService.changePassword(email, command)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public PatientDto changePassword(@PathVariable String email,
+                                     @Valid @RequestBody CommandChangePassword command) {
+        return patientService.changePassword(email, command);
     }
 }

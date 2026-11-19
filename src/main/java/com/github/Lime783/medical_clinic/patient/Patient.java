@@ -1,7 +1,11 @@
 package com.github.Lime783.medical_clinic.patient;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import com.github.Lime783.medical_clinic.exceptions.ClinicError;
+import com.github.Lime783.medical_clinic.exceptions.ClinicException;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -44,43 +48,43 @@ public class Patient {
 
     private void validateEmail(String newEmail) {
         if (newEmail.length() < 3) {
-            throw new IllegalArgumentException("Email length should be at least 3 characters: " + newEmail);
+            throw new ClinicException(ClinicError.INVALID_EMAIL, "Email length should be at least 3 characters");
         }
     }
 
     private void validatePassword(String newPassword) {
         if (newPassword.length() < 3) {
-            throw new IllegalArgumentException("Password length should be at least 3 characters: " + newPassword);
+            throw new ClinicException(ClinicError.INVALID_PASSWORD, "Password length should be at least 3 characters");
         }
     }
 
     private void validateIdCardNo(String newIdCardNo) {
         if (newIdCardNo.length() < 3) {
-            throw new IllegalArgumentException("ID card length should be at least 3 characters: " + newIdCardNo);
+            throw new ClinicException(ClinicError.INVALID_ID_CARD_NO, "ID card length should be at least 3 characters");
         }
     }
 
     private void validateFirstName(String newFirstName) {
         if (newFirstName.length() < 3) {
-            throw new IllegalArgumentException("First name length should be at least 3 characters: " + newFirstName);
+            throw new ClinicException(ClinicError.INVALID_FIRST_NAME, "First name length should be at least 3 characters: " + newFirstName);
         }
     }
 
     private void validateLastName(String newLastName) {
         if (newLastName.length() < 3) {
-            throw new IllegalArgumentException("Last name length should be at least 3 characters: " + newLastName);
+            throw new ClinicException(ClinicError.INVALID_LAST_NAME, "Last name length should be at least 3 characters: " + newLastName);
         }
     }
 
     private void validatePhoneNumber(String newPhoneNumber) {
         if (newPhoneNumber.length() < 3) {
-            throw new IllegalArgumentException("Phone number length should be at least 3 characters: " + newPhoneNumber);
+            throw new ClinicException(ClinicError.INVALID_PHONE_NUMBER, "Phone number length should be at least 3 characters: " + newPhoneNumber);
         }
     }
 
     private void validateBirthday(LocalDate newBirthday) {
         if (newBirthday.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Birthday should not be after now: " + newBirthday);
+            throw new ClinicException(ClinicError.INVALID_BIRTHDAY, "Birthday should not be after now: " + newBirthday);
         }
     }
 

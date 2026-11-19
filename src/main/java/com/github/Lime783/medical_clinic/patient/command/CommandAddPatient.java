@@ -10,7 +10,7 @@ public record CommandAddPatient(
         String email,
 
         @NotBlank(message = "Password cannot be blank or null")
-        @Size(min = 3, message = "Password must contain at least 3 characters")
+        @Size(min = 6, message = "Password must contain at least 6 characters")
         String password,
 
         @NotBlank(message = "ID card number cannot be blank or null")
@@ -24,6 +24,7 @@ public record CommandAddPatient(
         String lastName,
 
         @NotBlank(message = "Phone number cannot be blank or null")
+        @Size(min = 6, message = "Phone number must contain at least 6 digits")
         String phoneNumber,
 
         @NotNull

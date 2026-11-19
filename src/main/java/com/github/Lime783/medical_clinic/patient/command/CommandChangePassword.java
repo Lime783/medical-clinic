@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record CommandChangePassword(
         @JsonProperty("new-password")
         @NotBlank(message = "Password cannot be blank or null")
-        @Size(min = 3, message = "Password must contain at least 3 characters")
+        @Size(min = 6, message = "Password must contain at least 6 characters")
 
         String newPassword) {
 }

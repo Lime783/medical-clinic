@@ -27,7 +27,8 @@ public java.lang.String toString();
 
 (1) skąd MapStruct wie, co przepisać, gdy nic nie konfigurujesz;
 
-MapStruct w czasie kompilacji pisze kod, który przepisuje pola o tych samych nazwach w modelu i toDto lub odpowiednich commandów. 
+MapStruct w czasie kompilacji pisze kod, który przepisuje pola o tych samych nazwach w modelu i toDto lub odpowiednich
+commandów.
 
 (2) po co procesor adnotacji i co dzieje się w czasie kompilacji;
 
@@ -50,8 +51,8 @@ W osobnej klasie by spring boot zrobił z mappera beana do wstrzykiwania
          qualifiedByName = "inStock")
 ```
 
-target to pole wyniku, source to pole źródła, a ewentualna kropka w source sięga do pola danego obiektu w środku (np. source = "book.title")
-
+target to pole wyniku, source to pole źródła, a ewentualna kropka w source sięga do pola danego obiektu w środku (np.
+source = "book.title")
 
 (6) jak policzyć pole, którego źródło nie ma (@Named z qualifiedByName)
 

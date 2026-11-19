@@ -1,7 +1,7 @@
 package com.github.Lime783.medical_clinic.patient;
 
-import com.github.Lime783.medical_clinic.exceptions.DuplicateException;
-import com.github.Lime783.medical_clinic.exceptions.ResourceNotFoundException;
+import com.github.Lime783.medical_clinic.exceptions.ClinicError;
+import com.github.Lime783.medical_clinic.exceptions.ClinicException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,26 +19,17 @@ public class InMemoryPatientRepository implements PatientRepository {
 
     @Override
     public Patient add(Patient patientToAdd) {
-        if (patients.contains(patientToAdd)) {
-            throw new DuplicateException("Patient " + patientToAdd.getFirstName() + " " + patientToAdd.getLastName() + " already exists: " + patientToAdd.getId());
-        }
         patients.add(patientToAdd);
         return patientToAdd;
     }
 
     @Override
     public void deleteById(UUID id) {
-        if (findPatientById(id).isEmpty()) {
-            throw new ResourceNotFoundException("Patient with ID " + id + " does not exist");
-        }
         patients.removeIf(patient -> patient.getId().equals(id));
     }
 
     @Override
     public void deleteByEmail(String email) {
-        if (findPatientByEmail(email).isEmpty()) {
-            throw new ResourceNotFoundException("Patient with an email " + email + " does not exist");
-        }
         patients.removeIf(patient -> patient.getEmail().equals(email));
     }
 
@@ -51,7 +42,8 @@ public class InMemoryPatientRepository implements PatientRepository {
 
     @Override
     public Patient getPatientByEmail(String email) {
-        return findPatientByEmail(email).orElseThrow();
+        return findPatientByEmail(email).orElseThrow(() -> new ClinicException(ClinicError.PATIENT_NOT_FOUND,
+                "Patient not found"));
     }
 
     @Override
@@ -63,7 +55,8 @@ public class InMemoryPatientRepository implements PatientRepository {
 
     @Override
     public Patient getPatientById(UUID id) {
-        return findPatientById(id).orElseThrow();
+        return findPatientById(id).orElseThrow(() -> new ClinicException(ClinicError.PATIENT_NOT_FOUND,
+                "Patient with an id: " + id + " not found"));
     }
 
     @Override
