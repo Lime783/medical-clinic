@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @ToString(exclude = {"password", "idCardNo"})
-@EqualsAndHashCode(of = {"idCardNo", "firstName", "lastName"})
+@EqualsAndHashCode(of = {"email"})
 public class Patient {
     private final UUID id;
     private String email;
