@@ -2,25 +2,42 @@ package com.github.Lime783.medical_clinic.patient;
 
 import com.github.Lime783.medical_clinic.exceptions.ClinicError;
 import com.github.Lime783.medical_clinic.exceptions.ClinicException;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
 @ToString(exclude = {"password", "idCardNo"})
-@EqualsAndHashCode(of = {"idCardNo", "firstName", "lastName"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "patients")
 public class Patient {
-    private final UUID id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
-    private final String idCardNo;
+
+    @Column(nullable = false, unique = true)
+    private String idCardNo;
+
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
+
+    @Column(nullable = false)
     private LocalDate birthday;
 
     @Builder
