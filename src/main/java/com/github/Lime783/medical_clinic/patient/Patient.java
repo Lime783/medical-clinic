@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -43,7 +43,6 @@ public class Patient {
     @Builder
     public Patient(String email, String password, String idCardNo, String firstName, String lastName, String phoneNumber, LocalDate birthday) {
         validateData(email, password, idCardNo, firstName, lastName, phoneNumber, birthday);
-        this.id = UUID.randomUUID();
         this.email = email;
         this.password = password;
         this.idCardNo = idCardNo;

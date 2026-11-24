@@ -1,23 +1,14 @@
 package com.github.Lime783.medical_clinic.patient;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PatientRepository {
-    Patient add(Patient patient);
-
-    void deleteById(UUID id);
+public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
     void deleteByEmail(String email);
 
-    Optional<Patient> findPatientByEmail(String email);
-
-    Patient getPatientByEmail(String email);
-
-    Optional<Patient> findPatientById(UUID id);
-
-    Patient getPatientById(UUID id);
-
-    List<Patient> getAllPatients();
+    Optional<Patient> findByEmail(String email);
 }

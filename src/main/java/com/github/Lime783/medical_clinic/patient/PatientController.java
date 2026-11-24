@@ -31,7 +31,7 @@ public class PatientController {
     @Operation(summary = "List all patients")
     @GetMapping
     public List<PatientDto> getAllPatients() {
-        return patientService.getAllPatients();
+        return patientService.findAll();
     }
 
     @Operation(summary = "Get patient by email")
@@ -41,8 +41,8 @@ public class PatientController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     @GetMapping(params = "email")
-    public PatientDto getPatientByEmail(@RequestParam String email) {
-        return patientService.getPatientByEmail(email);
+    public PatientDto findByEmail(@RequestParam String email) {
+        return patientService.findByEmail(email);
     }
 
     @Operation(summary = "Add a patient")
@@ -54,8 +54,8 @@ public class PatientController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PostMapping
-    public ResponseEntity<PatientDto> addPatient(@Valid @RequestBody CommandAddPatient command) {
-        PatientDto saved = patientService.addPatientToDatabase(command);
+    public ResponseEntity<PatientDto> savePatient(@Valid @RequestBody CommandAddPatient command) {
+        PatientDto saved = patientService.add(command);
         return ResponseEntity.created(URI.create("/patients/" + saved.id())).body(saved);
     }
 
@@ -68,7 +68,7 @@ public class PatientController {
     @DeleteMapping("/{email}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePatient(@PathVariable @Email String email) {
-        patientService.deletePatientByEmail(email);
+        patientService.deleteByEmail(email);
     }
 
     @Operation(summary = "Change patient info without changing id")
@@ -80,7 +80,7 @@ public class PatientController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     @PutMapping("/{email}")
-    public PatientDto update(@PathVariable String email,
+    public PatientDto updatePatient(@PathVariable String email,
                              @Valid @RequestBody CommandUpdatePatient command) {
         return patientService.update(email, command);
     }

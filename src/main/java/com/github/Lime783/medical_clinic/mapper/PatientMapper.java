@@ -6,9 +6,13 @@ import com.github.Lime783.medical_clinic.patient.dto.PatientDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface PatientMapper {
     PatientDto toDto(Patient patient);
+
+    List<PatientDto> toDto(List<Patient> patients);
 
     Patient toEntity(CommandAddPatient command);
 }

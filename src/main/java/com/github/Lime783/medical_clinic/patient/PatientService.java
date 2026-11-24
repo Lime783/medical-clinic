@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,42 +19,27 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
 
-    public PatientDto addPatientToDatabase(CommandAddPatient command) {
+    public PatientDto add(CommandAddPatient command) {
         Patient patientToAdd = patientMapper.toEntity(command);
-        if (patientRepository.findPatientByEmail(command.email()).isPresent()) {
+        if (patientRepository.findByEmail(command.email()).isPresent()) {
             throw new ClinicException(ClinicError.PATIENT_ALREADY_EXISTS, "This patient already exists");
         }
-        return patientMapper.toDto(patientRepository.add(patientToAdd));
+        return patientMapper.toDto(patientRepository.save(patientToAdd));
     }
 
-    public void deletePatientFromDatabase(PatientDto patient) {
-        patientRepository.deleteById(patient.id());
-    }
-
-    public void deletePatientByEmail(String email) {
+    public void deleteByEmail(String email) {
         patientRepository.deleteByEmail(email);
     }
 
-    public Optional<PatientDto> findPatientByEmail(String email) {
-        return patientRepository.findPatientByEmail(email).map(patientMapper::toDto);
-    }
-
-    public PatientDto getPatientByEmail(String email) {
-        return patientMapper.toDto(patientRepository.getPatientByEmail(email));
-    }
-
-    public Optional<PatientDto> findPatientById(UUID id) {
-        return patientRepository.findPatientById(id).map(patientMapper::toDto);
-    }
-
-    public PatientDto getPatientById(UUID id) {
-        return patientMapper.toDto(patientRepository.getPatientById(id));
-    }
-
-    public List<PatientDto> getAllPatients() {
-        return patientRepository.getAllPatients().stream()
+    public PatientDto findByEmail(String email) {
+        return patientRepository.findByEmail(email)
                 .map(patientMapper::toDto)
-                .toList();
+                .orElseThrow(() -> new ClinicException(ClinicError.PATIENT_NOT_FOUND,
+                        "Patient not found"));
+    }
+
+    public List<PatientDto> findAll() {
+        return patientMapper.toDto(patientRepository.findAll());
     }
 
     public PatientDto update(String email, CommandUpdatePatient command) {
@@ -76,6 +59,7 @@ public class PatientService {
     }
 
     private Patient getPatientModel(String email) {
-        return patientRepository.getPatientByEmail(email);
+        return patientRepository.findByEmail(email).orElseThrow(() -> new ClinicException(
+                ClinicError.PATIENT_NOT_FOUND, "Patient not found"));
     }
 }
